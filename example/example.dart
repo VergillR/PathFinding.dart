@@ -27,23 +27,21 @@ main() {
       [1, 0, 0, 0, 0, 0, 0, 0],
       [1, 0, 0, 0, 0, 0, 0, 0],
     ],
+    // costs (all costs are 0 if no costs are given)
     [
       [0, 0, 1, 1, 0, 0, 0, 0],
-      [1, 0, 1, 1, 0, 4, 0, 1],
-      [1, 0, 1, 1, 0, 4, 0, 0],
-      [1, 0, 0, 0, 0, 4, 2, 2],
+      [1, 0, 1, 1, 0, 14, 0, 8],
+      [1, 0, 1, 1, 0, 14, 0, 0],
+      [1, 0, 0, 0, 0, 14, 18, 18],
       [1, 0, 0, 0, 0, 0, 0, 0],
       [1, 0, 0, 0, 0, 0, 0, 0],
       [1, 0, 0, 0, 0, 0, 0, 0],
       [1, 0, 0, 0, 0, 0, 0, 0],
     ],
   );
-  // var path = new JumpPointFinder().findPath(0, 0, 3, 3, grid.clone());
-  // print(path); // [[0, 0], [1, 1], [1, 2], [2, 3], [3, 3]]
+  var path = new JumpPointFinder().findPath(0, 0, 3, 3, grid1.clone());
+  print(path);
 
-  var path = new AStarFinder().findPath(0, 0, 7, 2, grid2.clone());
-  print(path); // [[0, 0], [1, 0], [1, 1], [1, 2], [1, 3], [2, 3], [3, 3]]
-
-  var path2 = new AStarFinder().findPath(0, 0, 6, 6, grid2.clone());
-  print(path2); // [[0, 0], [1, 0], [1, 1], [1, 2], [1, 3], [2, 3], [3, 3]]
+  var pathWithCosts = new AStarFinder().findPath(0, 0, 7, 2, grid2.clone());
+  print(pathWithCosts);
 }
