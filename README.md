@@ -10,6 +10,7 @@ http://pub.dartlang.org/packages/pathfinding#installing
 
 ```dart
 import 'package:pathfinding/finders/jps.dart';
+import 'package:pathfinding/finders/astar.dart';
 import 'package:pathfinding/core/grid.dart';
 
 main() {
