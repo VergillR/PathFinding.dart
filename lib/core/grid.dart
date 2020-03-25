@@ -12,12 +12,12 @@ import 'node.dart';
  *     If the matrix is not supplied, all the nodes will be walkable. 
  * @param {Array.<Array.<(number)>>} [costs] - A matrix
  *     representing the cost of walking the node.
- *     If the costs is not supplied, all the nodes will cost 0.  */
+ *     If the costs is not supplied, all the nodes will cost 0. 
+ * */
 class Grid {
   int width;
   int height;
   var nodes;
-  var costs;
 
   Grid(width, height, [matrix, costs]) {
     /**
@@ -30,8 +30,6 @@ class Grid {
      * @type number
      */
     this.height = height;
-
-    this.costs = costs;
 
     /**
      * A 2D array of nodes.
