@@ -8,6 +8,7 @@ library pathfinding.core.node;
  * @param {number} x - The x coordinate of the node on the grid.
  * @param {number} y - The y coordinate of the node on the grid.
  * @param {boolean} [walkable] - Whether this node is walkable.
+ * @param {number} [cost] - Node cost used by finders that allow non-uniform node costs.
  */
 class Node {
   /**
@@ -28,14 +29,18 @@ class Node {
    */
   bool walkable;
 
+  /**
+   * Cost to walk this node if its walkable
+   * @type number
+   */
+  int cost;
+
   // TODO: this is a hack...
   num g, h, f;
   bool opened, closed;
   Node parent;
 
-  Node(this.x, this.y, [walkable]) {
-    this.walkable = (walkable == null ? true : walkable);
-  }
+  Node(this.x, this.y, [this.walkable = true, this.cost = 0]);
 
   String toString() => 'Node[$x,$y]';
 }

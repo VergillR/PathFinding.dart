@@ -9,13 +9,17 @@ import 'node.dart';
  * @param {number} height Number of rows of the grid.
  * @param {Array.<Array.<(number|boolean)>>} [matrix] - A 0-1 matrix
  *     representing the walkable status of the nodes(0 or false for walkable).
- *     If the matrix is not supplied, all the nodes will be walkable.  */
+ *     If the matrix is not supplied, all the nodes will be walkable. 
+ * @param {Array.<Array.<(number)>>} [costs] - A matrix
+ *     representing the cost of walking the node.
+ *     If the costs is not supplied, all the nodes will cost 0.  */
 class Grid {
   int width;
   int height;
   var nodes;
+  var costs;
 
-  Grid(width, height, [matrix]) {
+  Grid(width, height, [matrix, costs]) {
     /**
      * The number of columns of the grid.
      * @type number
@@ -27,10 +31,12 @@ class Grid {
      */
     this.height = height;
 
+    this.costs = costs;
+
     /**
      * A 2D array of nodes.
      */
-    this.nodes = _buildNodes(width, height, matrix);
+    this.nodes = _buildNodes(width, height, matrix, costs);
   }
 
   /**
@@ -40,12 +46,12 @@ class Grid {
    * @param {number} height
    * @param {Array.<Array.<number|boolean>>} [matrix] - A 0-1 matrix representing
    *     the walkable status of the nodes.
+   * @param {Array.<Array.<number>>} [costs] - A matrix representing
+   *     the costs to walk the nodes.
    * @see Grid
    */
-  _buildNodes(width, height, matrix) {
-    var i, j,
-    nodes = new List(height),
-    row;
+  _buildNodes(width, height, matrix, costs) {
+    var i, j, nodes = new List(height), row;
 
     for (i = 0; i < height; ++i) {
       nodes[i] = new List(width);
@@ -55,13 +61,16 @@ class Grid {
       }
     }
 
-
     if (matrix == null) {
       return nodes;
     }
 
     if (matrix.length != height || matrix[0].length != width) {
       throw new Exception('Matrix size does not fit');
+    }
+
+    if (costs != null && (costs.length != height || costs[0].length != width)) {
+      throw new Exception('Costs size does not fit');
     }
 
     for (i = 0; i < height; ++i) {
@@ -71,17 +80,18 @@ class Grid {
           // while others will be un-walkable
           nodes[i][j].walkable = false;
         }
+        if (costs != null) {
+          nodes[i][j].cost = costs[i][j];
+        }
       }
     }
 
     return nodes;
   }
 
-
   Node getNodeAt(x, y) {
     return this.nodes[y][x];
   }
-
 
   /**
    * Determine whether the node at the given position is walkable.
@@ -94,6 +104,26 @@ class Grid {
     return this.isInside(x, y) && this.nodes[y][x].walkable;
   }
 
+  /**
+   * Get cost to walk the node at the given position.
+   * (Also returns false if the position is outside the grid.)
+   * @param {number} x - The x coordinate of the node.
+   * @param {number} y - The y coordinate of the node.
+   * @return {number} - Cost to walk node.
+   */
+  getCostAt(num x, num y) {
+    if (!this.isInside(x, y)) return false;
+    return this.nodes[y][x].cost;
+  }
+
+  /**
+ * Set cost of the node on the given position
+ * NOTE: throws exception if the coordinate is not inside the grid.
+ * @param {number} x - The x coordinate of the node.
+ * @param {number} y - The y coordinate of the node.
+ * @param {number} cost - Cost to walk the node.
+ */
+  setCostAt(num x, num y, num cost) => this.nodes[y][x].cost = cost;
 
   /**
    * Determine whether the position is inside the grid.
@@ -108,7 +138,6 @@ class Grid {
     return (x >= 0 && x < this.width) && (y >= 0 && y < this.height);
   }
 
-
   /**
    * Set whether the node on the given position is walkable.
    * NOTE: throws exception if the coordinate is not inside the grid.
@@ -119,7 +148,6 @@ class Grid {
   setWalkableAt(x, y, walkable) {
     this.nodes[y][x].walkable = walkable;
   }
-
 
   /**
    * Get the neighbors of the given node.
@@ -144,10 +172,14 @@ class Grid {
     var x = node.x,
         y = node.y,
         neighbors = [],
-        s0 = false, d0 = false,
-        s1 = false, d1 = false,
-        s2 = false, d2 = false,
-        s3 = false, d3 = false,
+        s0 = false,
+        d0 = false,
+        s1 = false,
+        d1 = false,
+        s2 = false,
+        d2 = false,
+        s3 = false,
+        d3 = false,
         nodes = this.nodes;
 
     // ↑
@@ -207,26 +239,25 @@ class Grid {
     return neighbors;
   }
 
-
   /**
    * Get a clone of this grid.
    * @return {Grid} Cloned grid.
    */
   clone() {
-    var i, j,
-
-    width = this.width,
-    height = this.height,
-    thisNodes = this.nodes,
-
-    newGrid = new Grid(width, height),
-    newNodes = new List(height),
-    row;
+    var i,
+        j,
+        width = this.width,
+        height = this.height,
+        thisNodes = this.nodes,
+        newGrid = new Grid(width, height),
+        newNodes = new List(height),
+        row;
 
     for (i = 0; i < height; ++i) {
       newNodes[i] = new List(width);
       for (j = 0; j < width; ++j) {
-        newNodes[i][j] = new Node(j, i, thisNodes[i][j].walkable);
+        newNodes[i][j] =
+            new Node(j, i, thisNodes[i][j].walkable, thisNodes[i][j].cost);
       }
     }
 
@@ -235,4 +266,3 @@ class Grid {
     return newGrid;
   }
 }
-

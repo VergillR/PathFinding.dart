@@ -1,4 +1,4 @@
-packages
+.packages
 pubspec.lock
 *.dart.js
 *.dart.js.deps

@@ -26,8 +26,11 @@ class AStarFinder {
   HeuristicFn heuristic;
   int weight;
 
-  AStarFinder({this.allowDiagonal: false, this.dontCrossCorners: false,
-      HeuristicFn heuristic, this.weight: 1}) {
+  AStarFinder(
+      {this.allowDiagonal: false,
+      this.dontCrossCorners: false,
+      HeuristicFn heuristic,
+      this.weight: 1}) {
     this.heuristic = heuristic == null ? Heuristic.manhattan : heuristic;
   }
 
@@ -40,13 +43,20 @@ class AStarFinder {
     var openList = new Heap((nodeA, nodeB) {
       return nodeA.f - nodeB.f;
     }),
-    startNode = grid.getNodeAt(startX, startY),
-    endNode = grid.getNodeAt(endX, endY),
-    heuristic = this.heuristic,
-    allowDiagonal = this.allowDiagonal,
-    dontCrossCorners = this.dontCrossCorners,
-    weight = this.weight,
-    node, neighbors, neighbor, i, l, x, y, ng;
+        startNode = grid.getNodeAt(startX, startY),
+        endNode = grid.getNodeAt(endX, endY),
+        heuristic = this.heuristic,
+        allowDiagonal = this.allowDiagonal,
+        dontCrossCorners = this.dontCrossCorners,
+        weight = this.weight,
+        node,
+        neighbors,
+        neighbor,
+        i,
+        l,
+        x,
+        y,
+        ng;
 
     // set the `g` and `f` value of the start node to be 0
     startNode.g = 0;
@@ -82,14 +92,17 @@ class AStarFinder {
 
         // get the distance between current node and the neighbor
         // and calculate the next g score
-        ng = node.g + ((x - node.x == 0 || y - node.y == 0) ? 1 : sqrt2);
+        ng = node.g +
+            neighbor.cost +
+            ((x - node.x == 0 || y - node.y == 0) ? 1 : sqrt2);
 
         // check if the neighbor has not been inspected yet, or
         // can be reached with smaller cost from the current node
         if (neighbor.opened != true || ng < neighbor.g) {
           neighbor.g = ng;
-          neighbor.h = neighbor.h != null ?
-              neighbor.h : weight * heuristic(abs(x - endX), abs(y - endY));
+          neighbor.h = neighbor.h != null
+              ? neighbor.h
+              : weight * heuristic(abs(x - endX), abs(y - endY));
           neighbor.f = neighbor.g + neighbor.h;
           neighbor.parent = node;
 
