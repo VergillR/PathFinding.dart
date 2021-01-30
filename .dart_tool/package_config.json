@@ -317,10 +317,10 @@
       "name": "pathfinding",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.0"
+      "languageVersion": "2.12"
     }
   ],
-  "generated": "2020-03-25T14:14:09.429850Z",
+  "generated": "2021-01-30T11:55:29.373096Z",
   "generator": "pub",
-  "generatorVersion": "2.8.0-dev.3.0.flutter-ef0c7f16e6"
+  "generatorVersion": "2.12.0-133.7.beta"
 }
